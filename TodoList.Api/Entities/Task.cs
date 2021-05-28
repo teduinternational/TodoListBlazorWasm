@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoList.Api.Enums;
@@ -11,9 +12,15 @@ namespace TodoList.Api.Entities
     {
         [Key]
         public Guid Id { get; set; }
+
+        [MaxLength(250)]
+        [Required]
         public string Name { get; set; }
 
-        public Guid? Assignee { get; set; }
+        public Guid? AssigneeId { get; set; }
+
+        [ForeignKey("AssigneeId")]
+        public User Assignee { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
