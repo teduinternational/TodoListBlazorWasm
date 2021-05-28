@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TodoList.Models;
 using Task = TodoList.Api.Entities.Task;
 
 namespace TodoList.Api.Repositories

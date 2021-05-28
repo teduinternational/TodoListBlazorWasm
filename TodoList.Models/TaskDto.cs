@@ -1,32 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TodoList.Models.Enums;
 
-namespace TodoList.Api.Entities
+namespace TodoList.Models
 {
-    public class Task
+    public class TaskDto
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [MaxLength(250)]
-        [Required]
         public string Name { get; set; }
 
         public Guid? AssigneeId { get; set; }
 
-        [ForeignKey("AssigneeId")]
-        public User Assignee { get; set; }
-
+        public string AssigneeName { set; get; }
+        
         public DateTime CreatedDate { get; set; }
 
         public Priority Priority { get; set; }
 
         public Status Status { get; set; }
-
     }
 }

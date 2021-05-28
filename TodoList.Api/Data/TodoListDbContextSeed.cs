@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using TodoList.Api.Entities;
-using TodoList.Api.Enums;
+using TodoList.Models.Enums;
 using Task = System.Threading.Tasks.Task;
 
 namespace TodoList.Api.Data

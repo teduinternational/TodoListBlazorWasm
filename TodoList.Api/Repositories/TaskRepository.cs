@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TodoList.Api.Data;
+using TodoList.Models;
 using Task = TodoList.Api.Entities.Task;
 
 namespace TodoList.Api.Repositories
@@ -16,9 +17,10 @@ namespace TodoList.Api.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Task>> GetTaskList()
+        public async Task<IEnumerable<Entities.Task>> GetTaskList()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks
+                .Include(x => x.Assignee).ToListAsync();
         }
 
         public async Task<Task> Create(Task task)
@@ -44,7 +46,7 @@ namespace TodoList.Api.Repositories
 
         public async Task<Task> GetById(Guid id)
         {
-            return await  _context.Tasks.FindAsync(id);
+            return await _context.Tasks.FindAsync(id);
         }
     }
 }
