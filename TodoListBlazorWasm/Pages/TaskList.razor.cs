@@ -9,7 +9,7 @@ using TodoListBlazorWasm.Services;
 
 namespace TodoListBlazorWasm.Pages
 {
-    public partial class TodoList
+    public partial class TaskList
     {
         [Inject] private ITaskApiClient TaskApiClient { set; get; }
 
