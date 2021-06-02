@@ -21,6 +21,7 @@ else
                 <th>Assignee</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,9 @@ else
                     <td>@item.AssigneeName</td>
                     <td>@item.CreatedDate.ToString("dd/MM/yyy hh:mm")</td>
                     <td>@item.Status</td>
+                    <td>
+                        <a href="/taskDetails/@item.Id">Detail</a>
+                    </td>
                 </tr>
             }
 
