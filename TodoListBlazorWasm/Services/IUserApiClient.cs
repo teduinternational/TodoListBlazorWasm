@@ -6,10 +6,8 @@ using TodoList.Models;
 
 namespace TodoListBlazorWasm.Services
 {
-    public interface ITaskApiClient
+    public interface IUserApiClient
     {
-        Task<List<TaskDto>> GetTaskList(TaskListSearch taskListSearch);
-
-        Task<TaskDto> GetTaskDetail(string id);
+        Task<List<AssigneeDto>> GetAssignees();
     }
 }
