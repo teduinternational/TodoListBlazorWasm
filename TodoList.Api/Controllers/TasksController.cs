@@ -105,5 +105,19 @@ namespace TodoList.Api.Controllers
                 CreatedDate = task.CreatedDate
             });
         }
+
+        [HttpGet]
+        [Route("assignees")]
+        public async Task<IActionResult> GetAssigneeList()
+        {
+            var users = await _taskRepository.GetUserList();
+            var assignees = users.Select(x => new AssigneeDto()
+            {
+                Id = x.Id,
+                FullName = x.FirstName + " " + x.LastName
+            });
+
+            return Ok(assignees);
+        }
     }
 }

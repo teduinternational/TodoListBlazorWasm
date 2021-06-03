@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using TodoList.Models;
+using TodoList.Models.Enums;
 using TodoListBlazorWasm.Services;
 
 namespace TodoListBlazorWasm.Pages
@@ -15,9 +16,22 @@ namespace TodoListBlazorWasm.Pages
 
         private List<TaskDto> Tasks;
 
+        private List<AssigneeDto> Assignees;
+
+        private TaskListSearch TaskListSearch = new TaskListSearch();
+
         protected override async Task OnInitializedAsync()
         {
             Tasks = await TaskApiClient.GetTaskList();
+            Assignees = await TaskApiClient.GetAssignees();
         }
+    }
+
+    public class TaskListSearch
+    {
+        public string Name { get; set; }
+        public string Assignee { set; get; }
+
+        public Priority Priority { get; set; }
     }
 }

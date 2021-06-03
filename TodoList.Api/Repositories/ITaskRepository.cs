@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TodoList.Api.Entities;
 using TodoList.Models;
 using Task = TodoList.Api.Entities.Task;
 
@@ -18,5 +19,7 @@ namespace TodoList.Api.Repositories
         Task<Task> Delete(Task task);
 
         Task<Task> GetById(Guid id);
+
+        Task<List<User>> GetUserList();
     }
 }
