@@ -5,6 +5,7 @@
 
 @inject ITaskApiClient TaskApiClient;
 @inject NavigationManager NavigationManager;
+@inject IToastService ToastService
 
 <h3>TaskCreate</h3>
 
@@ -39,7 +40,13 @@
         var result = await TaskApiClient.CreateTask(Task);
         if (result)
         {
+            ToastService.ShowSuccess($"{Task.Name} has been created successfully.","Success");
             NavigationManager.NavigateTo("/taskList");
+        }
+        else
+        {
+            ToastService.ShowError($"An error occurred in progress. Please contact to administrator.","Error");
+
         }
     }
 }
