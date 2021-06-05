@@ -1,0 +1,29 @@
+﻿@page "/taskCreate"
+@using TodoList.Models;
+@using TodoList.Models.Enums;
+
+<h3>TaskCreate</h3>
+
+<EditForm Model="Task">
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText class="form-control" @bind-Value="Task.Name"></InputText>
+        <small id="nameHelp" class="form-text text-muted">Please enter task title here.</small>
+    </div>
+    <div class="form-group">
+        <label for="Name">Priority</label>
+        <InputSelect class="form-control" @bind-Value="Task.Priority">
+            <option>Select a priority</option>
+            @foreach (string item in Enum.GetNames(typeof(Priority)))
+            {
+                <option value="@item">@item</option>
+            }
+        </InputSelect>
+        <small id="nameHelp" class="form-text text-muted">Choose a priority which you want.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    private TaskCreateRequest Task = new TaskCreateRequest();
+}
