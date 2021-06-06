@@ -7,8 +7,18 @@
       "sslPort": 44316
     }
   },
-  "profiles": 
-  {
+  "profiles": {
+    "Watch": {
+      "commandName": "Executable",
+      "executablePath": "dotnet.exe",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "watch run",
+      "launchBrowser": false,
+      "launchUrl": "https://localhost:5002/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "TodoListBlazorWasm": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
