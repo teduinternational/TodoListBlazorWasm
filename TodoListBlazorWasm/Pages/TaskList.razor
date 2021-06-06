@@ -1,7 +1,7 @@
 ﻿@page "/TaskList"
 @using TodoListBlazorWasm.Components;
 @using TodoList.Models.Enums;
-
+@inject IConfiguration Configuration
 <h3>Todo List</h3>
 
 @if (Tasks == null || Assignees == null)
@@ -73,7 +73,7 @@ else
                         <td>@item.Name</td>
                         <td><PriorityLabel Priority="item.Priority"></PriorityLabel></td>
                         <td>@item.AssigneeName</td>
-                        <td>@item.CreatedDate.ToString("dd/MM/yyy hh:mm")</td>
+                        <td>@item.CreatedDate.ToString(Configuration["DateTimeFormat"])</td>
                         <td><StatusLabel Status="item.Status"></StatusLabel></td>
                         <td>
                             <a href="/taskDetails/@item.Id">Detail</a>

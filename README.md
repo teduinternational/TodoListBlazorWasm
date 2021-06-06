@@ -15,4 +15,7 @@ If you have any question or contribution, you can create PR or issue for us. Thi
 - Setup startup project is multiple projects
 - Database will be created automatically when run API project.
 
+## References
+- Microsoft Docs: https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-5.0
+- Blazor University: https://blazor-university.com/
 
