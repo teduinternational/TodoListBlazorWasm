@@ -105,5 +105,24 @@ namespace TodoList.Api.Controllers
                 CreatedDate = task.CreatedDate
             });
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var task = await _taskRepository.GetById(id);
+            if (task == null) return NotFound($"{id} is not found");
+
+            await _taskRepository.Delete(task);
+            return Ok(new TaskDto()
+            {
+                Name = task.Name,
+                Status = task.Status,
+                Id = task.Id,
+                AssigneeId = task.AssigneeId,
+                Priority = task.Priority,
+                CreatedDate = task.CreatedDate
+            });
+        }
     }
 }
