@@ -1,0 +1,94 @@
+﻿@using TodoListBlazorWasm.Services;
+@using TodoList.Models;
+
+@inject ITaskApiClient TaskApiClient;
+@inject IToastService ToastService;
+@inject IUserApiClient UserApiClient;
+
+@if (ShowDialog && Assignees != null)
+{
+    <div class="modal fade show d-block" id="assignModel" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <EditForm Model="Model" OnSubmit="HandleAssignSubmit">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Assign task to user</h5>
+                        <button type="button" class="close" data-dismiss="modal" @onclick="()=>Hide()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <InputSelect class="form-control" @bind-Value="Model.UserId">
+                                <option value="@Guid.Empty">Select an user</option>
+                                @foreach (var assignee in Assignees)
+                                    {
+                                        <option value="@assignee.Id">@assignee.FullName</option>
+                                    }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="()=>Hide()" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>}
+
+@code {
+    protected bool ShowDialog { get; set; }
+
+    private AssignTaskRequest Model { set; get; } = new AssignTaskRequest();
+    private List<AssigneeDto> Assignees;
+    private Guid TaskId;
+
+    [Parameter]
+    public EventCallback<bool> CloseEventCallbak { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Assignees = await UserApiClient.GetAssignees();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (TaskId != Guid.Empty)
+        {
+            var task = await TaskApiClient.GetTaskDetail(TaskId.ToString());
+            Model.UserId = task.AssigneeId;
+        }
+    }
+
+    public void Show(Guid taskId)
+    {
+        ShowDialog = true;
+        TaskId = taskId;
+        StateHasChanged();
+    }
+
+    private void Hide()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+
+    protected async Task HandleAssignSubmit()
+    {
+        var result = await TaskApiClient.AssignTask(TaskId, Model);
+        if (result)
+        {
+            ShowDialog = false;
+            await CloseEventCallbak.InvokeAsync(true);
+
+        }
+        else
+        {
+            ToastService.ShowError("Assign task failed");
+        }
+    }
+}

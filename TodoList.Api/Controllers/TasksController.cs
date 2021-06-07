@@ -87,6 +87,35 @@ namespace TodoList.Api.Controllers
             });
         }
 
+        [HttpPut]
+        [Route("{id}/assign")]
+        public async Task<IActionResult> AssignTask(Guid id, [FromBody] AssignTaskRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var taskFromDb = await _taskRepository.GetById(id);
+
+            if (taskFromDb == null)
+            {
+                return NotFound($"{id} is not found");
+            }
+
+            taskFromDb.AssigneeId = request.UserId.Value == Guid.Empty ? null : request.UserId.Value;
+
+            var taskResult = await _taskRepository.Update(taskFromDb);
+
+            return Ok(new TaskDto()
+            {
+                Name = taskResult.Name,
+                Status = taskResult.Status,
+                Id = taskResult.Id,
+                AssigneeId = taskResult.AssigneeId,
+                Priority = taskResult.Priority,
+                CreatedDate = taskResult.CreatedDate
+            });
+        }
+
 
         //api/tasks/xxxx
         [HttpGet]
