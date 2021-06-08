@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TodoList.Models;
 using TodoList.Models.Enums;
+using TodoList.Models.SeedWork;
 using TodoListBlazorWasm.Components;
 using TodoListBlazorWasm.Pages.Components;
 using TodoListBlazorWasm.Services;
@@ -23,19 +24,19 @@ namespace TodoListBlazorWasm.Pages
 
         private Guid DeleteId { set; get; }
         private List<TaskDto> Tasks;
-
+        public MetaData MetaData { get; set; } = new MetaData();
 
         private TaskListSearch TaskListSearch = new TaskListSearch();
 
         protected override async Task OnInitializedAsync()
         {
-            Tasks = await TaskApiClient.GetTaskList(TaskListSearch);
+            await GetTasks();
         }
 
         public async Task SearchTask(TaskListSearch taskListSearch)
         {
             TaskListSearch = taskListSearch;
-            Tasks = await TaskApiClient.GetTaskList(TaskListSearch);
+            await GetTasks();
         }
 
         public void OnDeleteTask(Guid deleteId)
@@ -49,7 +50,7 @@ namespace TodoListBlazorWasm.Pages
             if (deleteConfirmed)
             {
                 await TaskApiClient.DeleteTask(DeleteId);
-                Tasks = await TaskApiClient.GetTaskList(TaskListSearch);
+                await GetTasks();
             }
         }
 
@@ -62,10 +63,23 @@ namespace TodoListBlazorWasm.Pages
         {
             if (result)
             {
-                Tasks = await TaskApiClient.GetTaskList(TaskListSearch);
+                await GetTasks();
             }
+        }
+
+        private async Task SelectedPage(int page)
+        {
+            TaskListSearch.PageNumber = page;
+            await GetTasks();
+        }
+
+        private async Task GetTasks()
+        {
+            var pagingResponse = await TaskApiClient.GetTaskList(TaskListSearch);
+            Tasks = pagingResponse.Items;
+            MetaData = pagingResponse.MetaData;
         }
     }
 
-   
+
 }
