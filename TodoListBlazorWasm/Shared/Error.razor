@@ -1,0 +1,21 @@
+﻿@using Microsoft.Extensions.Logging
+@inject ILogger<Error> Logger
+@inject IToastService ToastService;
+
+<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public void ProcessError(Exception ex)
+    {
+        ToastService.ShowError("Error happen in progress");
+
+        Logger.LogError("Error:ProcessError - Type: {Type} Message: {Message}",
+            ex.GetType(), ex.Message);
+    }
+}
+=

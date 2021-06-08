@@ -12,6 +12,7 @@ using TodoList.Models.SeedWork;
 using TodoListBlazorWasm.Components;
 using TodoListBlazorWasm.Pages.Components;
 using TodoListBlazorWasm.Services;
+using TodoListBlazorWasm.Shared;
 
 namespace TodoListBlazorWasm.Pages
 {
@@ -27,6 +28,9 @@ namespace TodoListBlazorWasm.Pages
         public MetaData MetaData { get; set; } = new MetaData();
 
         private TaskListSearch TaskListSearch = new TaskListSearch();
+
+        [CascadingParameter]
+        private Error Error { set; get; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -69,9 +73,17 @@ namespace TodoListBlazorWasm.Pages
 
         private async Task GetTasks()
         {
-            var pagingResponse = await TaskApiClient.GetTaskList(TaskListSearch);
-            Tasks = pagingResponse.Items;
-            MetaData = pagingResponse.MetaData;
+            try
+            {
+                var pagingResponse = await TaskApiClient.GetTaskList(TaskListSearch);
+                Tasks = pagingResponse.Items;
+                MetaData = pagingResponse.MetaData;
+            }
+            catch (Exception ex)
+            {
+                Error.ProcessError(ex);
+            }
+
         }
 
         private async Task SelectedPage(int page)
@@ -81,5 +93,5 @@ namespace TodoListBlazorWasm.Pages
         }
     }
 
-   
+
 }
