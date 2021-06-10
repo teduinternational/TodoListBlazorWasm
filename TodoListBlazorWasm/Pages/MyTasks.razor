@@ -1,0 +1,65 @@
+﻿@page "/MyTasks"
+@using TodoListBlazorWasm.Pages.Components;
+@using TodoListBlazorWasm.Components;
+@inject IConfiguration Configuration
+<h3>Todo List</h3>
+
+@if (Tasks == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <div class="row">
+        <TaskSearch OnSearch="SearchTask"></TaskSearch>
+    </div>
+
+    <div class="row mt-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Priority
+                    </th>
+                    <th>Assignee</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Tasks)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td><PriorityLabel Priority="item.Priority"></PriorityLabel></td>
+                        <td><a style="cursor:pointer;" @onclick="()=>OpenAssignPopup(item.Id)">@item.AssigneeName</a></td>
+                        <td>@item.CreatedDate.ToString(Configuration["DateTimeFormat"])</td>
+                        <td><StatusLabel Status="item.Status"></StatusLabel></td>
+                        <td>
+                            <a href="/taskDetails/@item.Id" class="btn btn-primary">Detail</a>
+                            <a href="/taskEdit/@item.Id" class="btn btn-warning">Edit</a>
+                            <button class="btn btn-danger" @onclick="()=> OnDeleteTask(item.Id)">Delete</button>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage"></Pagination>
+            </tfoot>
+        </table>
+    </div>
+    <Confirmation ConfirmationMessage="Are you sure to delete?"
+                  ConfirmationTitle="Delete Task"
+                  @ref="DeleteConfirmation"
+                  ConfirmationChanged="OnConfirmDeleteTask">
+
+    </Confirmation>
+
+    <AssignTask @ref="AssignTaskDialog" CloseEventCallbak="AssignTaskSuccess"></AssignTask>
+}
