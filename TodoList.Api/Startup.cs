@@ -14,6 +14,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TodoList.Api.Data;
 using TodoList.Api.Repositories;
+using TodoList.Api.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TodoList.Api
 {
@@ -33,6 +37,25 @@ namespace TodoList.Api
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<TodoListDbContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                    };
+                });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -67,7 +90,7 @@ namespace TodoList.Api
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
