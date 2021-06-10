@@ -1,0 +1,30 @@
+﻿@page "/login"
+@using TodoList.Models; 
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Login</h5>
+        <EditForm Model="LoginModel">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <InputText id="username" class="form-control" @bind-Value="LoginModel.UserName"></InputText>
+                <ValidationMessage For="()=> LoginModel.UserName"></ValidationMessage>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="LoginModel.UserName"></InputText>
+                <ValidationMessage For="()=> LoginModel.Password"></ValidationMessage>
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private LoginRequest LoginModel = new LoginRequest();
+}
