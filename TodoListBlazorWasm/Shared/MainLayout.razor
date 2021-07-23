@@ -1,15 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration;
 @using Microsoft.AspNetCore.Components.Authorization;
- 
-<BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="5"
-                IconType="IconType.FontAwesome"
-                ErrorIcon="fa fa-times"
-                InfoIcon="fa fa-info"
-                SuccessIcon="fa fa-check"
-                WarningIcon="fa fa-exclamation"
-                />
+@using TodoListBlazorWasm.Pages;
+
+<BlazoredToasts Position="ToastPosition.BottomRight" Timeout="5" IconType="IconType.FontAwesome" ErrorIcon="fa fa-times"
+    InfoIcon="fa fa-info" SuccessIcon="fa fa-check" WarningIcon="fa fa-exclamation" />
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -27,13 +22,20 @@
                     <a href="/login" class="ml-md-auto">Login</a>
                 </NotAuthorized>
             </AuthorizeView>
-            
+
 
             <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
         </div>
 
         <div class="content px-4">
-            @Body
+            <AuthorizeView>
+                <Authorized>
+                    @Body
+                </Authorized>
+                <NotAuthorized>
+                    <Login></Login>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </div>
 </div>
